@@ -9,6 +9,11 @@ import { BookOpen, Palette, ShoppingBag, ChevronRight, Menu, X } from "lucide-re
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
+  const hello = async () => {
+    // const res = await main()
+    // console.log(res)
+  }
+
   return (
     <div className="flex flex-col min-h-screen mx-auto max-w-7xl">
       <header className="sticky top-0 px-4 z-50 mx-auto w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -33,7 +38,7 @@ export default function Home() {
           </nav>
           <div className="hidden md:flex space-x-2">
             <Button variant="ghost">Log In</Button>
-            <Button>Sign Up</Button>
+            <Button onClick={hello}>Sign Up</Button>
           </div>
           <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMenuOpen(true)}>
             <Menu className="h-6 w-6" />
