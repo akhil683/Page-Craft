@@ -40,11 +40,15 @@ export default function EditBook({ params }: { params: { id: string } }) {
 
   return (
     <div className="mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Edit Book: {params.id}</h1>
-      <Button className="mt-4" onClick={saveChanges}>
-        Save Changes
-      </Button>
-      <Chat />
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex gap-4 items-center">
+          <h1 className="text-2xl font-bold">Edit Book: {params.id}</h1>
+          <Chat />
+        </div>
+        <Button className="mt-4" onClick={saveChanges}>
+          Save Changes
+        </Button>
+      </div>
       <div className="flex flex-col md:flex-row gap-4">
         <div className="flex-1 border rounded-lg p-4">
           <MenuBar editor={editor} />

@@ -13,9 +13,9 @@ export default function Navbar() {
     // console.log(res)
   }
   return (
-    <nav>
-      <header className="sticky top-0 px-4 z-50 mx-auto w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center justify-between">
+    <nav className="mx-auto sticky top-0">
+      <header className="sticky top-0 px-4 z-50 mx-auto backdrop-blur">
+        <div className="container flex h-16 mx-auto items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
             <BookOpen className="h-6 w-6 text-primary" />
             <span className="font-bold text-xl">Page Craft</span>
@@ -24,7 +24,7 @@ export default function Navbar() {
             <Link href="#features" className="text-sm font-medium hover:text-primary transition-colors">
               Explore
             </Link>
-            <Link href="#how-it-works" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link href="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
               Dashboard
             </Link>
             <Link href="#pricing" className="text-sm font-medium hover:text-primary transition-colors">
@@ -62,11 +62,11 @@ export default function Navbar() {
             Features
           </Link>
           <Link
-            href="#how-it-works"
+            href="/dashboard"
             className="text-lg font-medium hover:text-primary transition-colors"
             onClick={() => setIsMenuOpen(false)}
           >
-            How It Works
+            Dashboard
           </Link>
           <Link
             href="#pricing"

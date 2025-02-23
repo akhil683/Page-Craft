@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Plus } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 // Mock data for previously created books
 const previousBooks = [
@@ -16,6 +17,7 @@ const previousBooks = [
 ]
 
 export default function Dashboard() {
+  const router = useRouter()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [newBookTitle, setNewBookTitle] = useState("")
   const [newBookDescription, setNewBookDescription] = useState("")
@@ -27,6 +29,7 @@ export default function Dashboard() {
     setNewBookTitle("")
     setNewBookDescription("")
     setIsModalOpen(false)
+    router.push("/dashboard/edit/1")
     // In a real app, you'd redirect to the edit page here
   }
 
