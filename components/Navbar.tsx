@@ -1,7 +1,7 @@
 "use client"
 
 import { LogOut, Menu, X } from "lucide-react"
-import logo from "../public/images/page_craft_logo.png"
+import logo from "../public/images/logo_wihout_bg.png"
 import Link from "next/link"
 import { Button } from "./ui/button"
 import { useState } from "react"
@@ -61,7 +61,7 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 w-full">
-      <header className="z-50 mx-auto backdrop-blur md:px-12 px-4">
+      <header className="z-50 mx-auto backdrop-blur-3xl md:px-12 px-4">
         <div className="container flex h-16 mx-auto items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
             <Image

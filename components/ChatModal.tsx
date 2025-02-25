@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useChat } from "ai/react"
+import logo from "../public/images/logo_wihout_bg.png"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -9,27 +10,43 @@ import { ArrowUp, Bot, User } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Textarea } from "./ui/textarea"
 import { useSession } from "next-auth/react"
+import Image from "next/image"
 
 export default function ModalChat() {
   const [open, setOpen] = useState(false)
   const { data: session } = useSession()
   const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat()
 
+  const handleKeyPress = (e: any) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSubmit();
+    }
+  };
+
   return (
     <div className="flex items-center justify-center">
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button>
-            <Bot className="w-4 h-4 mr-2" />
+          <Button variant={"outline"}>
+            <Bot className="w-4 h-4 mr-1" />
             Chat with AI
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-7xl">
+        <DialogContent className="sm:max-w-7xl w-[90%] rounded-xl">
           <DialogHeader>
             <DialogTitle>Andomeda Intelligence (AI)</DialogTitle>
           </DialogHeader>
           <div className="flex flex-col h-[80vh]">
             <div className="flex-1 overflow-y-auto p-4 space-y-6">
+              {messages.length < 1 && (
+                <div className="h-full flex justify-center items-center w-full">
+                  <div className="flex flex-col justify-center items-center">
+                    <Image src={logo} width={300} height={300} className="h-28 md:36 w-28 md:w-36" alt="Logo" />
+                    <p className="max-md:text-sm text-gray-700">Start talking to Andromeda AI</p>
+                  </div>
+                </div>
+              )}
               {messages.map((message) => (
                 <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                   <div className={`flex flex-col max-w-[80%] ${message.role === "user" ? "items-end" : "items-start"}`}>
@@ -81,16 +98,10 @@ export default function ModalChat() {
                       <span className="text-sm font-medium">Andromeda</span>
                     </div>
                     <div className="space-y-2">
-                      <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 rounded-full bg-zinc-400 animate-bounce" />
-                        <div className="w-2 h-2 rounded-full bg-zinc-400 animate-bounce [animation-delay:0.2s]" />
-                        <div className="w-2 h-2 rounded-full bg-zinc-400 animate-bounce [animation-delay:0.4s]" />
-                      </div>
-                      <div className="space-y-2">
-                        <Skeleton className="h-4 w-[250px]" />
-                        <Skeleton className="h-4 w-[200px]" />
-                      </div>
+                      <Skeleton className="h-4 w-[250px]" />
+                      <Skeleton className="h-4 w-[200px]" />
                     </div>
+                    {/* </div> */}
                   </div>
                 </div>
               )}
@@ -102,7 +113,8 @@ export default function ModalChat() {
                   value={input}
                   onChange={handleInputChange}
                   placeholder="Ask Andomeda..."
-                  className="flex-1 py-4 border-none shadow-none focus-visible:ring-transparent resize-none text-4xl"
+                  className="flex-1 border-none shadow-none focus-visible:ring-transparent resize-none md:text-xl"
+                  onKeyDown={handleKeyPress}
                   disabled={isLoading}
                 />
                 <Button type="submit" size="icon" disabled={isLoading} className="rounded-xl">

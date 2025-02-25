@@ -40,17 +40,17 @@ export default function EditBook() {
 
   return (
     <div className="mx-auto p-4 mt-16">
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex gap-4 items-center">
-          <h1 className="text-2xl font-bold">Edit Book: </h1>
+      <div className="flex max-md:flex-col md:justify-between md:items-center mb-4">
+        <h1 className="md:text-2xl text-xl font-bold">Edit Book: </h1>
+        <div className="flex gap-4 items-center max-md:justify-between max-md:w-full max-md:mt-2">
           <ModalChat />
+          <Button onClick={saveChanges}>
+            Save Changes
+          </Button>
         </div>
-        <Button className="mt-4" onClick={saveChanges}>
-          Save Changes
-        </Button>
       </div>
       <div className="flex flex-col md:flex-row gap-4">
-        <div className="flex-1 border rounded-lg p-4">
+        <div className="flex-1 md:border rounded-lg md:p-4">
           <MenuBar editor={editor} />
           <EditorContent
             editor={editor}
@@ -74,83 +74,94 @@ const MenuBar = ({ editor }: { editor: any }) => {
   }
 
   return (
-    <div className="flex flex-wrap gap-2 mb-4 p-2 border rounded-lg bg-muted">
+    <div className="flex flex-wrap md:gap-2 gap-1 mb-4 p-2 border rounded-lg bg-muted">
       <Button
         size="icon"
         variant={editor.isActive("bold") ? "secondary" : "ghost"}
         onClick={() => editor.chain().focus().toggleBold().run()}
+        className="hover:bg-gray-200"
       >
-        <Bold className="h-4 w-4" />
+        <Bold className="md:h-4 md:w-4 h-2 w-2" />
       </Button>
       <Button
         size="icon"
         variant={editor.isActive("italic") ? "secondary" : "ghost"}
         onClick={() => editor.chain().focus().toggleItalic().run()}
+        className="hover:bg-gray-200"
       >
-        <Italic className="h-4 w-4" />
+        <Italic className="md:h-4 md:w-4 h-2 w-2" />
       </Button>
       <Button
         size="icon"
         variant={editor.isActive("underline") ? "secondary" : "ghost"}
         onClick={() => editor.chain().focus().toggleUnderline().run()}
+        className="hover:bg-gray-200"
       >
-        <UnderlineIcon className="h-4 w-4" />
+        <UnderlineIcon className="md:h-4 md:w-4 h-2 w-2" />
       </Button>
       <Button
         size="icon"
         variant={editor.isActive("heading", { level: 1 }) ? "secondary" : "ghost"}
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+        className="hover:bg-gray-200"
       >
-        <Heading1 className="h-4 w-4" />
+        <Heading1 className="md:h-4 md:w-4 h-2 w-2" />
       </Button>
       <Button
         size="icon"
         variant={editor.isActive("heading", { level: 2 }) ? "secondary" : "ghost"}
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+        className="hover:bg-gray-200"
       >
-        <Heading2 className="h-4 w-4" />
+        <Heading2 className="md:h-4 md:w-4 h-2 w-2" />
       </Button>
       <Button
         size="icon"
         variant={editor.isActive("bulletList") ? "secondary" : "ghost"}
         onClick={() => editor.chain().focus().toggleBulletList().run()}
+        className="hover:bg-gray-200"
       >
-        <List className="h-4 w-4" />
+        <List className="md:h-4 md:w-4 h-2 w-2" />
       </Button>
       <Button
         size="icon"
         variant={editor.isActive("orderedList") ? "secondary" : "ghost"}
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
+        className="hover:bg-gray-200"
       >
-        <ListOrdered className="h-4 w-4" />
+        <ListOrdered className="md:h-4 md:w-4 h-2 w-2" />
       </Button>
       <Button
         size="icon"
         variant={editor.isActive({ textAlign: "left" }) ? "secondary" : "ghost"}
         onClick={() => editor.chain().focus().setTextAlign("left").run()}
+        className="hover:bg-gray-200"
       >
-        <AlignLeft className="h-4 w-4" />
+        <AlignLeft className="md:h-4 md:w-4 h-2 w-2" />
       </Button>
       <Button
         size="icon"
         variant={editor.isActive({ textAlign: "center" }) ? "secondary" : "ghost"}
         onClick={() => editor.chain().focus().setTextAlign("center").run()}
+        className="hover:bg-gray-200"
       >
-        <AlignCenter className="h-4 w-4" />
+        <AlignCenter className="md:h-4 md:w-4 h-2 w-2" />
       </Button>
       <Button
         size="icon"
         variant={editor.isActive({ textAlign: "right" }) ? "secondary" : "ghost"}
         onClick={() => editor.chain().focus().setTextAlign("right").run()}
+        className="hover:bg-gray-200"
       >
-        <AlignRight className="h-4 w-4" />
+        <AlignRight className="md:h-4 md:w-4 h-2 w-2" />
       </Button>
       <Button
         size="icon"
         variant={editor.isActive("blockquote") ? "secondary" : "ghost"}
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
+        className="hover:bg-gray-200"
       >
-        <Quote className="h-4 w-4" />
+        <Quote className="md:h-4 md:w-4 h-2 w-2" />
       </Button>
     </div>
   )
