@@ -90,8 +90,8 @@ export default function Navbar() {
                   className="h-6 w-6 rounded-full"
                   src={session?.user?.image as string}
                   alt={session?.user?.name as string}
-                  width={6}
-                  height={6}
+                  width={50}
+                  height={50}
                 />
                 <LogOut className="w-8 h-8" />
               </Button>
