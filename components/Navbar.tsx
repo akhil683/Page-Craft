@@ -1,18 +1,19 @@
 "use client"
 
-import { BookOpen, Menu, X } from "lucide-react"
+import { BookOpen, LogOut, Menu, X } from "lucide-react"
 import Link from "next/link"
 import { Button } from "./ui/button"
 import { useState } from "react"
 import { signIn, useSession, signOut } from "next-auth/react"
 import { toast } from "sonner"
+import Image from "next/image"
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const { data: session } = useSession()
   const [loading, setLoading] = useState(false)
-
+  console.log(session)
   const handleSignIn = async () => {
     setLoading(true)
     try {
@@ -57,7 +58,22 @@ export default function Navbar() {
             </Link>
           </nav>
           <div className="hidden md:flex space-x-2">
-            <Button onClick={handleSignIn}>Sign In</Button>
+            {session ? (
+              <Button onClick={handleSignOut} className="rounded-full flex justify-center items-center gap-2">
+                <Image
+                  className="h-6 w-6 rounded-full"
+                  src={session?.user?.image as string}
+                  alt={session?.user?.name as string}
+                  width={6}
+                  height={6}
+                />
+                <LogOut className="w-8 h-8" />
+              </Button>
+            ) : (
+              <Button onClick={handleSignIn} disabled={loading} className="rounded-full">
+                Sign In
+              </Button>
+            )}
           </div>
           <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMenuOpen(true)}>
             <Menu className="h-6 w-6" />
