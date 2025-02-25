@@ -19,9 +19,10 @@ import {
   Quote,
 } from "lucide-react"
 import Chat from "@/app/components/Chat"
+import ModalChat from "@/components/ChatModal"
 
 
-export default function EditBook({ params }: { params: { id: string } }) {
+export default function EditBook() {
   const [content, setContent] = useState("<p>Start writing your book here...</p>")
 
   const editor = useEditor({
@@ -42,7 +43,8 @@ export default function EditBook({ params }: { params: { id: string } }) {
     <div className="mx-auto p-4">
       <div className="flex justify-between items-center mb-4">
         <div className="flex gap-4 items-center">
-          <h1 className="text-2xl font-bold">Edit Book: {params.id}</h1>
+          <h1 className="text-2xl font-bold">Edit Book: </h1>
+          <ModalChat />
           <Chat />
         </div>
         <Button className="mt-4" onClick={saveChanges}>
