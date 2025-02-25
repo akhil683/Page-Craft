@@ -4,17 +4,39 @@ import { BookOpen, Menu, X } from "lucide-react"
 import Link from "next/link"
 import { Button } from "./ui/button"
 import { useState } from "react"
+import { signIn, useSession, signOut } from "next-auth/react"
+import { toast } from "sonner"
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  const hello = async () => {
-    // const res = await main()
-    // console.log(res)
+  const { data: session } = useSession()
+  const [loading, setLoading] = useState(false)
+
+  const handleSignIn = async () => {
+    setLoading(true)
+    try {
+      await signIn("google", { callbackUrl: '/dashboard' })
+    } catch (SignInError) {
+      console.log("Error during signin: ", SignInError)
+      toast("Error")
+    } finally {
+      setLoading(false)
+    }
   }
+
+  const handleSignOut = async () => {
+    try {
+      await signOut()
+      toast("Logged out successfully")
+    } catch (SignOutError) {
+      console.log("Error during signout: ", SignOutError)
+    }
+  }
+
   return (
-    <nav className="mx-auto sticky top-0">
-      <header className="sticky top-0 px-4 z-50 mx-auto backdrop-blur">
+    <nav className="fixed top-0 w-full">
+      <header className="z-50 mx-auto backdrop-blur md:px-12 px-4">
         <div className="container flex h-16 mx-auto items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
             <BookOpen className="h-6 w-6 text-primary" />
@@ -35,8 +57,7 @@ export default function Navbar() {
             </Link>
           </nav>
           <div className="hidden md:flex space-x-2">
-            <Button variant="ghost">Log In</Button>
-            <Button onClick={hello}>Sign Up</Button>
+            <Button onClick={handleSignIn}>Sign In</Button>
           </div>
           <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMenuOpen(true)}>
             <Menu className="h-6 w-6" />
