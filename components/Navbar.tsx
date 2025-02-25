@@ -1,6 +1,7 @@
 "use client"
 
-import { BookOpen, LogOut, Menu, X } from "lucide-react"
+import { LogOut, Menu, X } from "lucide-react"
+import logo from "../public/images/page_craft_logo.png"
 import Link from "next/link"
 import { Button } from "./ui/button"
 import { useState } from "react"
@@ -8,12 +9,35 @@ import { signIn, useSession, signOut } from "next-auth/react"
 import { toast } from "sonner"
 import Image from "next/image"
 
+const navOptions = [
+  {
+    name: "Explore",
+    link: "/explore",
+  },
+  {
+    name: "Dashboard",
+    link: "/dashboard",
+  },
+  {
+    name: "Features",
+    link: "/features",
+  },
+  {
+    name: "Pricing",
+    link: "/pricing",
+  },
+  {
+    name: "About",
+    link: "/about",
+  },
+]
+
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const { data: session } = useSession()
   const [loading, setLoading] = useState(false)
-  console.log(session)
+
   const handleSignIn = async () => {
     setLoading(true)
     try {
@@ -40,22 +64,24 @@ export default function Navbar() {
       <header className="z-50 mx-auto backdrop-blur md:px-12 px-4">
         <div className="container flex h-16 mx-auto items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
-            <BookOpen className="h-6 w-6 text-primary" />
-            <span className="font-bold text-xl">Page Craft</span>
+            <Image
+              src={logo}
+              width={100}
+              height={100}
+              className="w-14 h-14"
+              alt="Page Craft Logo" />
+            <span className="font-bold md:text-lg">Page Craft</span>
           </Link>
           <nav className="hidden md:flex gap-6">
-            <Link href="#features" className="text-sm font-medium hover:text-primary transition-colors">
-              Explore
-            </Link>
-            <Link href="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
-              Dashboard
-            </Link>
-            <Link href="#pricing" className="text-sm font-medium hover:text-primary transition-colors">
-              Pricing
-            </Link>
-            <Link href="#pricing" className="text-sm font-medium hover:text-primary transition-colors">
-              About
-            </Link>
+            {navOptions.map(route => (
+              <Link
+                key={route.link}
+                href={route.link}
+                className="text-sm font-medium hover:text-primary transition-colors"
+              >
+                {route.name}
+              </Link>
+            ))}
           </nav>
           <div className="hidden md:flex space-x-2">
             {session ? (
@@ -85,39 +111,43 @@ export default function Navbar() {
       <div
         className={`fixed inset-y-0 right-0 z-50 w-64 bg-background shadow-lg transform transition-transform duration-300 ease-in-out ${isMenuOpen ? "translate-x-0" : "translate-x-full"}`}
       >
-        <div className="flex justify-end p-4">
+        <div className="absolute  top-2 right-2">
           <Button variant="ghost" size="icon" onClick={() => setIsMenuOpen(false)}>
             <X className="h-6 w-6" />
           </Button>
         </div>
-        <nav className="flex flex-col gap-4 p-4">
-          <Link
-            href="#features"
-            className="text-lg font-medium hover:text-primary transition-colors"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Features
-          </Link>
-          <Link
-            href="/dashboard"
-            className="text-lg font-medium hover:text-primary transition-colors"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Dashboard
-          </Link>
-          <Link
-            href="#pricing"
-            className="text-lg font-medium hover:text-primary transition-colors"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Pricing
-          </Link>
-          <Button variant="ghost" className="justify-start" onClick={() => setIsMenuOpen(false)}>
-            Log In
-          </Button>
-          <Button className="justify-start" onClick={() => setIsMenuOpen(false)}>
-            Sign Up
-          </Button>
+        <div className="flex flex-col w-full justify-center items-center">
+          <Image src={logo} width={300} height={300} alt="Page Craft Logo" />
+        </div>
+        <nav className="space-y-12 px-4">
+          <div className="flex flex-col gap-6">
+            {navOptions.map((route => (
+              <Link
+                key={route.link}
+                href={route.link}
+                className="text-lg font-medium hover:text-primary transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {route.name}
+              </Link>
+            )))}
+          </div>
+          {session ? (
+            <Button onClick={handleSignOut} className="rounded-full w-full py-4 flex justify-center items-center gap-2">
+              <Image
+                src={session?.user?.image as string}
+                alt={session?.user?.name as string}
+                width={50}
+                height={50}
+                className="h-6 w-6 rounded-full"
+              />
+              <LogOut className="w-8 h-8" />
+            </Button>
+          ) : (
+            <Button onClick={handleSignIn} disabled={loading} className="rounded-full">
+              Sign In
+            </Button>
+          )}
         </nav>
       </div>
     </nav>

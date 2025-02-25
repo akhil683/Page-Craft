@@ -18,7 +18,6 @@ import {
   AlignRight,
   Quote,
 } from "lucide-react"
-import Chat from "@/app/components/Chat"
 import ModalChat from "@/components/ChatModal"
 
 
@@ -40,12 +39,11 @@ export default function EditBook() {
   }
 
   return (
-    <div className="mx-auto p-4">
+    <div className="mx-auto p-4 mt-16">
       <div className="flex justify-between items-center mb-4">
         <div className="flex gap-4 items-center">
           <h1 className="text-2xl font-bold">Edit Book: </h1>
           <ModalChat />
-          <Chat />
         </div>
         <Button className="mt-4" onClick={saveChanges}>
           Save Changes

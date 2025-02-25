@@ -1,5 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
+import logo from "../public/images/page_craft_logo.png"
 import { Button } from "@/components/ui/button"
 import { BookOpen, Palette, ShoppingBag, ChevronRight } from "lucide-react"
 
@@ -19,7 +20,7 @@ export default function Home() {
                   The ultimate platform for aspiring authors, creators, and storytellers. With our cutting-edge AI tools, you can write, design, and publish stunning books.
                 </p>
               </div>
-              <div className="space-x-4">
+              <div className="flex max-md:flex-col gap-2">
                 <Button size="lg">
                   Start Writing for Free
                 </Button>
@@ -281,11 +282,16 @@ export default function Home() {
             </div>
           </div>
           <div className="mt-8 border-t pt-8 flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center space-x-2">
-              <BookOpen className="h-6 w-6 text-primary" />
-              <span className="font-bold text-xl">Page Craft</span>
+            <div className="flex items-center justice space-x-2">
+              <Image
+                src={logo}
+                width={50}
+                height={50}
+                alt="Page Craft Logo"
+              />
+              <span className="text-lg">Page Craft</span>
             </div>
-            <p className="text-sm text-muted-foreground mt-4 md:mt-0">© 2024 BookCraft. All rights reserved.</p>
+            <p className="text-sm text-muted-foreground mt-4 md:mt-0">© 2024 Page Craft. All rights reserved.</p>
           </div>
         </div>
       </footer>

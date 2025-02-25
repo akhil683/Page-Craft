@@ -4,13 +4,15 @@ import { useState } from "react"
 import { useChat } from "ai/react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Bot, Send, User } from "lucide-react"
+import { ArrowUp, Bot, User } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Textarea } from "./ui/textarea"
+import { useSession } from "next-auth/react"
 
 export default function ModalChat() {
   const [open, setOpen] = useState(false)
+  const { data: session } = useSession()
   const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat()
 
   return (
@@ -38,7 +40,7 @@ export default function ModalChat() {
                       <Avatar className="h-8 w-8">
                         {message.role === "user" ? (
                           <>
-                            <AvatarImage src="/placeholder.svg?height=32&width=32" alt="User" />
+                            <AvatarImage src={session?.user?.image as string} className="border rounded-full" alt="User" />
                             <AvatarFallback>
                               <User className="h-4 w-4" />
                             </AvatarFallback>
@@ -52,8 +54,8 @@ export default function ModalChat() {
                           </>
                         )}
                       </Avatar>
-                      <span className="text-sm font-medium">
-                        {message.role === "user" ? "John Doe" : "Andromeda AI"}
+                      <span className="font-medium">
+                        {message.role === "user" ? session?.user?.name : "Andromeda AI"}
                       </span>
                     </div>
                     <div
@@ -93,17 +95,18 @@ export default function ModalChat() {
                 </div>
               )}
             </div>
-            <div className="border border-gray-500 p-4 bg-gray-300 rounded-full">
-              <form onSubmit={handleSubmit} className="flex items-center space-x-2">
-                <Input
+
+            <div className="border border-gray-500 bg-gray-200 p-4 rounded-2xl">
+              <form onSubmit={handleSubmit} className="flex items-end space-x-2 overflow-hidden">
+                <Textarea
                   value={input}
                   onChange={handleInputChange}
-                  placeholder="Type your message..."
-                  className="flex-1 rounded-full bg-background"
+                  placeholder="Ask Andomeda..."
+                  className="flex-1 py-4 border-none shadow-none focus-visible:ring-transparent resize-none text-4xl"
                   disabled={isLoading}
                 />
-                <Button type="submit" size="icon" disabled={isLoading} className="rounded-full">
-                  <Send className="h-4 w-4" />
+                <Button type="submit" size="icon" disabled={isLoading} className="rounded-xl">
+                  <ArrowUp className="h-4 w-4" />
                   <span className="sr-only">Send message</span>
                 </Button>
               </form>
