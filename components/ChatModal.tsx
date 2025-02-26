@@ -11,12 +11,15 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Textarea } from "./ui/textarea"
 import { useSession } from "next-auth/react"
 import Image from "next/image"
+import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { prismLight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
 export default function ModalChat() {
   const [open, setOpen] = useState(false)
   const { data: session } = useSession()
   const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat()
-
   const handleKeyPress = (e: any) => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -33,7 +36,7 @@ export default function ModalChat() {
             Chat with AI
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-7xl w-[90%] rounded-xl">
+        <DialogContent className="sm:max-w-7xl w-[90%] rounded-xl max-md:p-2">
           <DialogHeader>
             <DialogTitle>Andomeda Intelligence (AI)</DialogTitle>
           </DialogHeader>
@@ -48,39 +51,67 @@ export default function ModalChat() {
                 </div>
               )}
               {messages.map((message) => (
-                <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
+                <div key={message.id} className={`flex overflow-hidden ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                   <div className={`flex flex-col max-w-[80%] ${message.role === "user" ? "items-end" : "items-start"}`}>
                     <div
                       className={`flex items-center gap-2 mb-2 ${message.role === "user" ? "flex-row-reverse" : "flex-row"
                         }`}
                     >
-                      <Avatar className="h-8 w-8">
-                        {message.role === "user" ? (
-                          <>
+                      {message.role === "user" ? (
+                        <>
+                          <Avatar className="h-8 w-8">
                             <AvatarImage src={session?.user?.image as string} className="border rounded-full" alt="User" />
                             <AvatarFallback>
                               <User className="h-4 w-4" />
                             </AvatarFallback>
-                          </>
-                        ) : (
-                          <>
+                          </Avatar>
+                        </>
+                      ) : (
+                        <>
+                          <Avatar className="h-8 w-8">
                             <AvatarImage src="/placeholder.svg?height=32&width=32" alt="AI Assistant" />
                             <AvatarFallback>
                               <Bot className="h-4 w-4" />
                             </AvatarFallback>
-                          </>
-                        )}
-                      </Avatar>
+                          </Avatar>
+                        </>
+                      )}
                       <span className="font-medium">
                         {message.role === "user" ? session?.user?.name : "Andromeda AI"}
                       </span>
                     </div>
-                    <div
-                      className={`rounded-lg px-4 py-2 ${message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"
-                        }`}
-                    >
-                      {message.content}
+                    <div className="max-w-[80vw] md:max-w-[100%] text-gray-800 overflow-hidden">
+                      <ReactMarkdown
+                        rehypePlugins={[rehypeRaw]}
+                        components={{
+                          code({ node, className, children, ...props }) {
+                            const match = /language-(\w+)/.exec(className || '');
+                            return match ? (
+                              <SyntaxHighlighter
+                                children={String(children).replace(/\n$/, '')}
+                                style={prismLight}
+                                language={match[1]}
+                                PreTag="div"
+                                {...props}
+                              />
+                            ) : (
+                              <code className={className} {...props}>
+                                {children}
+                              </code>
+                            );
+                          },
+                        }}
+                      >
+                        {message.content}
+                      </ReactMarkdown>
                     </div>
+                    {/* <div */}
+                    {/*   className={`prose rounded-lg px-4 py-2 ${message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted" */}
+                    {/*     }`} */}
+                    {/* > */}
+                    {/*   {message.content} */}
+                    {/**/}
+                    {/* </div> */}
                   </div>
                 </div>
               ))}
@@ -107,7 +138,7 @@ export default function ModalChat() {
               )}
             </div>
 
-            <div className="border border-gray-500 bg-gray-200 p-4 rounded-2xl">
+            <div className="border border-gray-500 shadow-gray-500 bg-gray-200 md:p-4 p-2 rounded-2xl">
               <form onSubmit={handleSubmit} className="flex items-end space-x-2 overflow-hidden">
                 <Textarea
                   value={input}
@@ -126,7 +157,7 @@ export default function ModalChat() {
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+    </div >
   )
 }
 

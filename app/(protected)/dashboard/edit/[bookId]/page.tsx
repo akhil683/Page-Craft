@@ -27,7 +27,7 @@ export default function EditBook() {
   const editor = useEditor({
     extensions: [StarterKit, Underline],
     content: content,
-    onUpdate: ({ editor }) => {
+    onUpdate: ({ editor }: { editor: any }) => {
       setContent(editor.getHTML())
     },
   })
