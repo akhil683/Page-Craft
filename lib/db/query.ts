@@ -12,3 +12,11 @@ export async function getBooksByAuthor(authorId: string | undefined) {
 
   return booksByAuthor
 }
+
+export async function getAllBooks() {
+  const allBooks = await db
+    .select()
+    .from(books)
+
+  return allBooks
+}
