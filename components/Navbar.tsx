@@ -60,7 +60,7 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="fixed top-0 w-full">
+    <nav className="fixed top-0 w-full z-30">
       <header className="z-50 mx-auto backdrop-blur-3xl md:px-12 px-4">
         <div className="container flex h-16 mx-auto items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">

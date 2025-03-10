@@ -5,9 +5,9 @@ import { ReactNode } from "react";
 export default async function DashboardLayout({ children }: { children: ReactNode }) {
   const session = await auth()
 
-  if (!session) {
-    redirect("/")
-  }
+  // if (!session) {
+  //   redirect("/")
+  // }
 
   return (
     <main>

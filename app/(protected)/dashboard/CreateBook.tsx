@@ -1,4 +1,5 @@
 'use client'
+
 import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -10,27 +11,40 @@ import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 
 export default function CreateBook() {
-
   const router = useRouter()
   const [createLoading, setCreateLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [newBookTitle, setNewBookTitle] = useState("")
   const [newBookDescription, setNewBookDescription] = useState("")
+  const [newBookTags, setNewBookTags] = useState("")
+  const [coverImage, setCoverImage] = useState<File | null>(null)
 
   const handleCreateBook = async () => {
-    if (!newBookTitle || !newBookDescription) {
-      toast("Title and description is required.")
+    if (!newBookTitle || !newBookDescription || !coverImage) {
+      toast("Title, description, and cover image are required.")
       return
     }
+
     setCreateLoading(true)
+
     try {
-      await createBook(newBookTitle, newBookDescription)
+      const formData = new FormData()
+      formData.append("title", newBookTitle)
+      formData.append("description", newBookDescription)
+      formData.append("tags", newBookTags)
+      formData.append("coverImage", coverImage)
+
+      await createBook(formData)
+
       setNewBookTitle("")
       setNewBookDescription("")
+      setNewBookTags("")
+      setCoverImage(null)
       setIsModalOpen(false)
+
       router.push("/dashboard/edit/1")
     } catch (createError) {
-      toast("Unexpected error occured.")
+      toast("Unexpected error occurred.")
     } finally {
       setCreateLoading(false)
     }
@@ -58,6 +72,15 @@ export default function CreateBook() {
             />
           </div>
           <div className="grid gap-2">
+            <label htmlFor="tags">Tags</label>
+            <Input
+              id="tags"
+              value={newBookTags}
+              onChange={(e) => setNewBookTags(e.target.value)}
+              placeholder="Tags (e.g. horror, biography etc)"
+            />
+          </div>
+          <div className="grid gap-2">
             <label htmlFor="description">Description (up to 100 words)</label>
             <Textarea
               id="description"
@@ -67,13 +90,21 @@ export default function CreateBook() {
               rows={4}
             />
           </div>
+          <div className="grid gap-2">
+            <label htmlFor="coverImage">Cover Image</label>
+            <Input
+              id="coverImage"
+              type="file"
+              accept="image/*"
+              onChange={(e) => setCoverImage(e.target.files?.[0] || null)}
+            />
+          </div>
         </div>
         <Button onClick={handleCreateBook} disabled={createLoading} className="flex justify-center items-center gap-2">
           {createLoading && <Loader2 className="animate-spin" />}
-          Create new Book
+          Create New Book
         </Button>
       </DialogContent>
     </Dialog>
-
   )
 }

@@ -4,8 +4,7 @@ import logo from "../public/images/page_craft_logo.png"
 import { Button } from "@/components/ui/button"
 import { BookOpen, Palette, ShoppingBag, ChevronRight } from "lucide-react"
 
-export default function Home() {
-
+export default async function Home() {
   return (
     <div className="flex flex-col min-h-screen mx-auto max-w-7xl">
       <main className="flex-1">
@@ -295,7 +294,7 @@ export default function Home() {
           </div>
         </div>
       </footer>
-    </div>
+    </div >
   )
 }
 
