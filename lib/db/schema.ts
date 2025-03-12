@@ -196,6 +196,22 @@ export const collectionBooks = pgTable("collection_books", {
   addedAt: timestamp("added_at").defaultNow(),
 });
 
+//User Card Table
+export const cart = pgTable("cart", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id")
+    .references(() => users.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+export const cartItems = pgTable("cart_items", {
+  id: serial("id").primaryKey(),
+  cartId: integer("cart_id")
+    .references(() => cart.id, { onDelete: "cascade" }),
+  bookId: integer("book_id")
+    .references(() => books.id, { onDelete: "cascade" }),
+  addedAt: timestamp("added_at").defaultNow(),
+});
+
 // Notifications table
 export const notifications = pgTable("notifications", {
   id: serial("id").primaryKey(),

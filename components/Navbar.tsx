@@ -19,6 +19,10 @@ const navOptions = [
     link: "/dashboard",
   },
   {
+    name: "Cart",
+    link: "/cart",
+  },
+  {
     name: "Features",
     link: "/features",
   },
