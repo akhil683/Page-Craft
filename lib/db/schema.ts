@@ -1,19 +1,26 @@
-import { pgTable, serial, text, timestamp, boolean, integer, decimal, pgEnum, primaryKey } from 'drizzle-orm/pg-core';
+import {
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  boolean,
+  integer,
+  decimal,
+  pgEnum,
+  primaryKey,
+} from "drizzle-orm/pg-core";
 
 // Enums
-export const paymentStatusEnum = pgEnum('payment_status', ['PENDING', 'COMPLETED', 'FAILED']);
-export const paymentMethodEnum = pgEnum('payment_method', ['UPI', 'CARD', 'WALLET']);
-
-// Users table
-export const users = pgTable("user", {
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  name: text("name"),
-  email: text("email").unique(),
-  emailVerified: timestamp("emailVerified", { mode: "date" }),
-  image: text("image"),
-});
+export const paymentStatusEnum = pgEnum("payment_status", [
+  "PENDING",
+  "COMPLETED",
+  "FAILED",
+]);
+export const paymentMethodEnum = pgEnum("payment_method", [
+  "UPI",
+  "CARD",
+  "WALLET",
+]);
 
 // Accounts table
 export const accounts = pgTable(
@@ -39,7 +46,7 @@ export const accounts = pgTable(
         columns: [account.provider, account.providerAccountId],
       }),
     },
-  ]
+  ],
 );
 
 // Sessions table
@@ -65,7 +72,7 @@ export const verificationTokens = pgTable(
         columns: [verificationToken.identifier, verificationToken.token],
       }),
     },
-  ]
+  ],
 );
 
 // Authenticators table
@@ -89,15 +96,27 @@ export const authenticators = pgTable(
         columns: [authenticator.userId, authenticator.credentialID],
       }),
     },
-  ]
+  ],
 );
+
+// Users table
+export const users = pgTable("user", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: text("name"),
+  email: text("email").unique(),
+  emailVerified: timestamp("emailVerified", { mode: "date" }),
+  image: text("image"),
+});
 
 // Books table
 export const books = pgTable("books", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
-  authorId: text("author_id")
-    .references(() => users.id, { onDelete: "cascade" }),
+  authorId: text("author_id").references(() => users.id, {
+    onDelete: "cascade",
+  }),
   description: text("description"),
   coverImage: text("cover_image"),
   price: integer("price"),
@@ -112,8 +131,9 @@ export const books = pgTable("books", {
 // Book Metadata table
 export const bookMetadata = pgTable("book_metadata", {
   id: serial("id").primaryKey(),
-  bookId: integer("book_id")
-    .references(() => books.id, { onDelete: "cascade" }),
+  bookId: integer("book_id").references(() => books.id, {
+    onDelete: "cascade",
+  }),
   genre: text("genre"),
   language: text("language"),
   pageCount: integer("page_count"),
@@ -123,8 +143,9 @@ export const bookMetadata = pgTable("book_metadata", {
 // Marketplace table
 export const marketplace = pgTable("marketplace", {
   id: serial("id").primaryKey(),
-  bookId: integer("book_id")
-    .references(() => books.id, { onDelete: "cascade" }),
+  bookId: integer("book_id").references(() => books.id, {
+    onDelete: "cascade",
+  }),
   price: decimal("price", { precision: 10, scale: 2 }).notNull(),
   currency: text("currency").default("INR"),
   available: boolean("available").default(true),
@@ -134,10 +155,10 @@ export const marketplace = pgTable("marketplace", {
 // Transactions table
 export const transactions = pgTable("transactions", {
   id: serial("id").primaryKey(),
-  userId: text("user_id")
-    .references(() => users.id, { onDelete: "cascade" }),
-  bookId: integer("book_id")
-    .references(() => books.id, { onDelete: "cascade" }),
+  userId: text("user_id").references(() => users.id, { onDelete: "cascade" }),
+  bookId: integer("book_id").references(() => books.id, {
+    onDelete: "cascade",
+  }),
   amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
   currency: text("currency").default("INR"),
   paymentStatus: paymentStatusEnum("payment_status").notNull(),
@@ -148,10 +169,10 @@ export const transactions = pgTable("transactions", {
 // Reviews table
 export const reviews = pgTable("reviews", {
   id: serial("id").primaryKey(),
-  userId: text("user_id")
-    .references(() => users.id, { onDelete: "cascade" }),
-  bookId: integer("book_id")
-    .references(() => books.id, { onDelete: "cascade" }),
+  userId: text("user_id").references(() => users.id, { onDelete: "cascade" }),
+  bookId: integer("book_id").references(() => books.id, {
+    onDelete: "cascade",
+  }),
   rating: integer("rating").notNull(),
   comment: text("comment"),
   createdAt: timestamp("created_at").defaultNow(),
@@ -160,28 +181,31 @@ export const reviews = pgTable("reviews", {
 // Followers table
 export const followers = pgTable("followers", {
   id: serial("id").primaryKey(),
-  followerId: text("follower_id")
-    .references(() => users.id, { onDelete: "cascade" }),
-  followingId: text("following_id")
-    .references(() => users.id, { onDelete: "cascade" }),
+  followerId: text("follower_id").references(() => users.id, {
+    onDelete: "cascade",
+  }),
+  followingId: text("following_id").references(() => users.id, {
+    onDelete: "cascade",
+  }),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
 // Public Library table
 export const publicLibrary = pgTable("public_library", {
   id: serial("id").primaryKey(),
-  bookId: integer("book_id")
-    .references(() => books.id, { onDelete: "cascade" }),
-  addedByUserId: text("added_by_user_id")
-    .references(() => users.id, { onDelete: "cascade" }),
+  bookId: integer("book_id").references(() => books.id, {
+    onDelete: "cascade",
+  }),
+  addedByUserId: text("added_by_user_id").references(() => users.id, {
+    onDelete: "cascade",
+  }),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
 // Book Collections table
 export const collections = pgTable("collections", {
   id: serial("id").primaryKey(),
-  userId: text("user_id")
-    .references(() => users.id, { onDelete: "cascade" }),
+  userId: text("user_id").references(() => users.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   description: text("description"),
   createdAt: timestamp("created_at").defaultNow(),
@@ -189,34 +213,34 @@ export const collections = pgTable("collections", {
 
 export const collectionBooks = pgTable("collection_books", {
   id: serial("id").primaryKey(),
-  collectionId: integer("collection_id")
-    .references(() => collections.id, { onDelete: "cascade" }),
-  bookId: integer("book_id")
-    .references(() => books.id, { onDelete: "cascade" }),
+  collectionId: integer("collection_id").references(() => collections.id, {
+    onDelete: "cascade",
+  }),
+  bookId: integer("book_id").references(() => books.id, {
+    onDelete: "cascade",
+  }),
   addedAt: timestamp("added_at").defaultNow(),
 });
 
 //User Card Table
 export const cart = pgTable("cart", {
   id: serial("id").primaryKey(),
-  userId: text("user_id")
-    .references(() => users.id, { onDelete: "cascade" }),
+  userId: text("user_id").references(() => users.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at").defaultNow(),
 });
 export const cartItems = pgTable("cart_items", {
   id: serial("id").primaryKey(),
-  cartId: integer("cart_id")
-    .references(() => cart.id, { onDelete: "cascade" }),
-  bookId: integer("book_id")
-    .references(() => books.id, { onDelete: "cascade" }),
+  cartId: integer("cart_id").references(() => cart.id, { onDelete: "cascade" }),
+  bookId: integer("book_id").references(() => books.id, {
+    onDelete: "cascade",
+  }),
   addedAt: timestamp("added_at").defaultNow(),
 });
 
 // Notifications table
 export const notifications = pgTable("notifications", {
   id: serial("id").primaryKey(),
-  userId: text("user_id")
-    .references(() => users.id, { onDelete: "cascade" }),
+  userId: text("user_id").references(() => users.id, { onDelete: "cascade" }),
   message: text("message").notNull(),
   read: boolean("read").default(false),
   createdAt: timestamp("created_at").defaultNow(),
